@@ -27,11 +27,11 @@ import javax.ejb.Startup;
 @Startup
 public class StartUpClass {
 
-  @EJB
-  ModelDao modelDao;
+    @EJB
+    ModelDao modelDao;
 
-  @PostConstruct
-  public void init() {
-    System.out.println(modelDao.get());
-  }
+    @PostConstruct
+    public void init() {
+        System.out.println(modelDao.get());
+    }
 }

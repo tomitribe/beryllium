@@ -28,16 +28,16 @@ import java.nio.file.Paths;
 
 public abstract class Utility {
 
-  static String fileContent(final String filePath) throws URISyntaxException, IOException {
+    static String fileContent(final String filePath) throws URISyntaxException, IOException {
 
-    final URL url = Thread.currentThread().getContextClassLoader().getResource("./" + filePath);
-    if (null == url) {
-      throw new IOException(String.format("(%s) File not found in path (%s)", filePath, Thread
-          .currentThread().getContextClassLoader().getResource("./")));
+        final URL url = Thread.currentThread().getContextClassLoader().getResource("./" + filePath);
+        if (null == url) {
+            throw new IOException(String.format("(%s) File not found in path (%s)", filePath, Thread
+                    .currentThread().getContextClassLoader().getResource("./")));
+        }
+
+        final byte[] encoded = Files.readAllBytes(Paths.get(url.toURI()));
+
+        return StandardCharsets.UTF_8.decode(ByteBuffer.wrap(encoded)).toString();
     }
-
-    final byte[] encoded = Files.readAllBytes(Paths.get(url.toURI()));
-
-    return StandardCharsets.UTF_8.decode(ByteBuffer.wrap(encoded)).toString();
-  }
 }

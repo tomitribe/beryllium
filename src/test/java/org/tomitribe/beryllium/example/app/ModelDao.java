@@ -30,15 +30,15 @@ import javax.persistence.criteria.Root;
 @Singleton
 public class ModelDao {
 
-  @PersistenceContext
-  private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-  public List<Model> get() {
-    CriteriaBuilder cb = em.getCriteriaBuilder();
+    public List<Model> get() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
 
-    CriteriaQuery<Model> q = cb.createQuery(Model.class);
-    Root<Model> c = q.from(Model.class);
-    q.select(c);
-    return em.createQuery(q).getResultList();
-  }
+        CriteriaQuery<Model> q = cb.createQuery(Model.class);
+        Root<Model> c = q.from(Model.class);
+        q.select(c);
+        return em.createQuery(q).getResultList();
+    }
 }

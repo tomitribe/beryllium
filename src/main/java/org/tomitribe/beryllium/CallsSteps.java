@@ -45,69 +45,69 @@ import static com.xebialabs.restito.semantics.Condition.put;
 
 public class CallsSteps {
 
-  private StubServer server;
-  private StubHttp stubHttp;
+    private StubServer server;
+    private StubHttp   stubHttp;
 
-  @Before
-  public void setUp() {
-    server = new StubServer(9090).run();
-    stubHttp = whenHttp(server);
-  }
-
-  @After
-  public void tearDown() {
-    server.stop();
-  }
-
-  @Given("^The call to external service should be:$")
-  public void theCallToExternalServiceShouldBe(final DataTable data) throws Throwable {
-
-    final List<Call> calls = data.asList(Call.class);
-
-    for (final Call call : calls) {
-      stubHttp.match(call.getHttpMethod(), call.buildQueryParams()).then(
-          status(HttpStatus.getHttpStatus(call.getStatusCode())),
-          resourceContent(Thread.currentThread().getContextClassLoader()
-              .getResource("fixtures/" + call.getFilename())));
-    }
-  }
-
-  @Value
-  private static class Call {
-    private String method;
-    private String url;
-    private int statusCode;
-    private String filename;
-
-    ConditionWithApplicables getHttpMethod() {
-      switch (getMethod().toUpperCase()) {
-        case "POST":
-          return post(buildUrl());
-        case "PUT":
-          return put(buildUrl());
-        case "DELETE":
-          return delete(buildUrl());
-        case "GET":
-          return get(buildUrl());
-        default:
-          return get(buildUrl());
-      }
+    @Before
+    public void setUp() {
+        server = new StubServer(9090).run();
+        stubHttp = whenHttp(server);
     }
 
-    String buildUrl() {
-      return (getUrl().contains("?")) ? getUrl().split("\\?")[0] : getUrl();
+    @After
+    public void tearDown() {
+        server.stop();
     }
 
-    Condition buildQueryParams() {
-      final String queryParamsStr = (getUrl().contains("?")) ? getUrl().split("\\?")[1] : null;
+    @Given("^The call to external service should be:$")
+    public void theCallToExternalServiceShouldBe(final DataTable data) throws Throwable {
 
-      final String[] kvs = queryParamsStr != null ? queryParamsStr.split("\\&") : new String[0];
-      final List<Condition> conditions = new ArrayList<>();
-      for (final String kv : kvs) {
-        final String[] sp = kv.split("\\=");
-        conditions.add(parameter(sp[0], sp[1]));
-      }
-      return Condition.composite(conditions.toArray(new Condition[conditions.size()]));
+        final List<Call> calls = data.asList(Call.class);
+
+        for (final Call call : calls) {
+            stubHttp.match(call.getHttpMethod(), call.buildQueryParams()).then(
+                    status(HttpStatus.getHttpStatus(call.getStatusCode())),
+                    resourceContent(Thread.currentThread().getContextClassLoader()
+                                          .getResource("fixtures/" + call.getFilename())));
+        }
     }
-  }
+
+    @Value
+    private static class Call {
+        private String method;
+        private String url;
+        private int    statusCode;
+        private String filename;
+
+        ConditionWithApplicables getHttpMethod() {
+            switch (getMethod().toUpperCase()) {
+                case "POST":
+                    return post(buildUrl());
+                case "PUT":
+                    return put(buildUrl());
+                case "DELETE":
+                    return delete(buildUrl());
+                case "GET":
+                    return get(buildUrl());
+                default:
+                    return get(buildUrl());
+            }
+        }
+
+        String buildUrl() {
+            return (getUrl().contains("?")) ? getUrl().split("\\?")[0] : getUrl();
+        }
+
+        Condition buildQueryParams() {
+            final String queryParamsStr = (getUrl().contains("?")) ? getUrl().split("\\?")[1] : null;
+
+            final String[] kvs = queryParamsStr != null ? queryParamsStr.split("\\&") : new String[0];
+            final List<Condition> conditions = new ArrayList<>();
+            for (final String kv : kvs) {
+                final String[] sp = kv.split("\\=");
+                conditions.add(parameter(sp[0], sp[1]));
+            }
+            return Condition.composite(conditions.toArray(new Condition[conditions.size()]));
+        }
+    }
 }

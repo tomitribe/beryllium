@@ -39,18 +39,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "models")
 public class Model {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  Long id;
-  @Column(name = "created")
-  Date created;
-  @Column(name = "modified")
-  Date modified;
-  @Column(name = "email")
-  String email;
-  @Column(name = "fullname")
-  String fullname;
-  @Column(name = "password")
-  String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    Long   id;
+    @Column(name = "created")
+    Date   created;
+    @Column(name = "modified")
+    Date   modified;
+    @Column(name = "email")
+    String email;
+    @Column(name = "fullname")
+    String fullname;
+    @Column(name = "password")
+    String password;
 }

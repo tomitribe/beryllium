@@ -59,178 +59,179 @@ import lombok.Value;
 @Stateless
 public class Controller {
 
-  @Context
-  UriInfo uriInfo;
+    @Context
+    UriInfo uriInfo;
 
-  @EJB
-  ModelDao modelDao;
+    @EJB
+    ModelDao modelDao;
 
-  private final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
-  @GET
-  @Path("/successful/get")
-  @Produces("application/json")
-  public Response successfulGET(@Context final HttpServletRequest request) {
-    Response.ResponseBuilder builder =
-        Response.ok(new Model(1L, new Date(), new Date(), null, "", ""));
-    buildResponseHeaders(builder, request);
-    return builder.build();
-  }
-
-  @GET
-  @Path("/successful/get/params")
-  @Produces("application/json")
-  public Response successfulGETQueryParams(@QueryParam("param1") final String param1,
-      @QueryParam("param2") final String param2) {
-    return Response.ok(new Model(1L, new Date(), new Date(), null, param2, param1)).build();
-  }
-
-  @GET
-  @Path("/users")
-  @Produces("application/json")
-  public List<Model> successfulGETUsers() {
-    return modelDao.get();
-  }
-
-  @GET
-  @Path("/successful/get/csv")
-  @Produces("text/csv")
-  public Response successfulGETCSV() {
-    return Response.ok("\"headerA\",\"headerB\"\n\"row1A\",\"row1B\"\n").build();
-  }
-
-  @HEAD
-  @Path("/successful/head")
-  public Response successfulHEAD() {
-    return Response.noContent().build();
-  }
-
-  @PUT
-  @Path("/successful/put")
-  public Response successfulPUT(final String body) {
-    return Response.noContent().build();
-  }
-
-  @POST
-  @Path("/successful/post")
-  public Response successfulPOST(final String body) {
-    return Response.created(uriInfo.getAbsolutePathBuilder().path("1").build()).build();
-  }
-
-  @PUT
-  @Path("/successful/headers/put")
-  @Consumes("application/json")
-  public Response successfulHeadersPUT(@Context final HttpServletRequest request, final String body) {
-    Response.ResponseBuilder builder = Response.noContent();
-    buildResponseHeaders(builder, request);
-    return builder.build();
-  }
-
-  @POST
-  @Path("/successful/headers/post")
-  @Consumes("application/json")
-  public Response successfulHeadersPOST(@Context final HttpServletRequest request, final String body) {
-    Response.ResponseBuilder builder =
-        Response.created(uriInfo.getAbsolutePathBuilder().path("1").build());
-    buildResponseHeaders(builder, request);
-    return builder.build();
-  }
-
-  private void buildResponseHeaders(final Response.ResponseBuilder builder,
-      final HttpServletRequest request) {
-    Enumeration<String> enumerations = request.getHeaderNames();
-    while (enumerations.hasMoreElements()) {
-      final String headerName = enumerations.nextElement();
-      builder.header(headerName, request.getHeader(headerName));
-    }
-  }
-
-  @DELETE
-  @Path("/successful/delete")
-  @Produces("application/json")
-  public Response successfulDELETE() {
-    return Response.noContent().build();
-  }
-
-  @GET
-  @Path("/external/call/user/71e7cb11")
-  @Consumes("application/json")
-  @Produces("application/json")
-  public Response mockExternalCall() {
-    final WebClient client = WebClient.create("http://localhost:9090");
-    final ResponseWrapper wrapper;
-    final List<ResponseItem> items = Lists.newArrayList();
-    final List<ResponseItem> getItems = Lists.newArrayList();
-
-    List<Future<Response>> calls = Lists.newArrayList();
-    for (int i = 0; i < 5; i++) {
-      final WebClient getClient =
-          WebClient.create("http://localhost:9090").accept(MediaType.APPLICATION_JSON)
-              .path("/user/71e7cb11").query("a", i + 1);
-      final Future<Response> future = executor.submit(new GetResponse(getClient));
-      calls.add(future);
+    @GET
+    @Path("/successful/get")
+    @Produces("application/json")
+    public Response successfulGET(@Context final HttpServletRequest request) {
+        Response.ResponseBuilder builder =
+                Response.ok(new Model(1L, new Date(), new Date(), null, "", ""));
+        buildResponseHeaders(builder, request);
+        return builder.build();
     }
 
-    for (final Future<Response> responseFuture : calls) {
-      try {
-        final Response r = responseFuture.get();
-        getItems.add(new ResponseItem(r.getStatus()));
-      } catch (InterruptedException | ExecutionException e) {
-        e.printStackTrace();
-      }
-    }
-    final Response postResponse =
-        client.accept(MediaType.APPLICATION_JSON).back(true).path("/user").query("b", "b")
-            .post("{\"a\":\"a\"}");
-    final Response putResponse =
-        client.accept(MediaType.APPLICATION_JSON).back(true).path("/user/71e7cb11").put(null);
-    final Response deleteResponse =
-        client.accept(MediaType.APPLICATION_JSON).back(true).path("/user/71e7cb11").delete();
-
-    final List<Response> responseList = ImmutableList.of(postResponse, putResponse, deleteResponse);
-
-    for (final Response response : responseList) {
-      items.add(new ResponseItem(response.getStatus()));
+    @GET
+    @Path("/successful/get/params")
+    @Produces("application/json")
+    public Response successfulGETQueryParams(@QueryParam("param1") final String param1,
+                                             @QueryParam("param2") final String param2) {
+        return Response.ok(new Model(1L, new Date(), new Date(), null, param2, param1)).build();
     }
 
-    items.addAll(getItems);
-
-    wrapper = new ResponseWrapper(items);
-    return Response.ok(wrapper).build();
-  }
-
-  @Value
-  static class GetResponse implements Callable<Response> {
-    private WebClient client;
-
-    @Override
-    public Response call() throws Exception {
-      return client.get();
+    @GET
+    @Path("/users")
+    @Produces("application/json")
+    public List<Model> successfulGETUsers() {
+        return modelDao.get();
     }
-  }
 
-  @GET
-  @Path("/external/proxy/user/71e7cb11")
-  @Produces("application/json")
-  public Response mockExternalProxy() {
-    final WebClient client = WebClient.create("http://localhost:9090");
-    final Response response =
-        client.accept(MediaType.APPLICATION_JSON).path("/user/71e7cb11").query("a", "a").get();
-    return Response.ok(response.getEntity()).build();
-  }
+    @GET
+    @Path("/successful/get/csv")
+    @Produces("text/csv")
+    public Response successfulGETCSV() {
+        return Response.ok("\"headerA\",\"headerB\"\n\"row1A\",\"row1B\"\n").build();
+    }
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @XmlRootElement
-  private static class ResponseWrapper {
-    private List<ResponseItem> responses;
-  }
+    @HEAD
+    @Path("/successful/head")
+    public Response successfulHEAD() {
+        return Response.noContent().build();
+    }
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  private static class ResponseItem {
-    private int status;
-  }
+    @PUT
+    @Path("/successful/put")
+    public Response successfulPUT(final String body) {
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/successful/post")
+    public Response successfulPOST(final String body) {
+        return Response.created(uriInfo.getAbsolutePathBuilder().path("1").build()).build();
+    }
+
+    @PUT
+    @Path("/successful/headers/put")
+    @Consumes("application/json")
+    public Response successfulHeadersPUT(@Context final HttpServletRequest request, final String body) {
+        Response.ResponseBuilder builder = Response.noContent();
+        buildResponseHeaders(builder, request);
+        return builder.build();
+    }
+
+    @POST
+    @Path("/successful/headers/post")
+    @Consumes("application/json")
+    public Response successfulHeadersPOST(@Context final HttpServletRequest request, final String body) {
+        Response.ResponseBuilder builder =
+                Response.created(uriInfo.getAbsolutePathBuilder().path("1").build());
+        buildResponseHeaders(builder, request);
+        return builder.build();
+    }
+
+    private void buildResponseHeaders(final Response.ResponseBuilder builder,
+                                      final HttpServletRequest request) {
+        Enumeration<String> enumerations = request.getHeaderNames();
+        while (enumerations.hasMoreElements()) {
+            final String headerName = enumerations.nextElement();
+            builder.header(headerName, request.getHeader(headerName));
+        }
+    }
+
+    @DELETE
+    @Path("/successful/delete")
+    @Produces("application/json")
+    public Response successfulDELETE() {
+        return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/external/call/user/71e7cb11")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response mockExternalCall() {
+        final WebClient client = WebClient.create("http://localhost:9090");
+        final ResponseWrapper wrapper;
+        final List<ResponseItem> items = Lists.newArrayList();
+        final List<ResponseItem> getItems = Lists.newArrayList();
+
+        List<Future<Response>> calls = Lists.newArrayList();
+        for (int i = 0; i < 5; i++) {
+            final WebClient getClient =
+                    WebClient.create("http://localhost:9090").accept(MediaType.APPLICATION_JSON)
+                             .path("/user/71e7cb11").query("a", i + 1);
+            final Future<Response> future = executor.submit(new GetResponse(getClient));
+            calls.add(future);
+        }
+
+        for (final Future<Response> responseFuture : calls) {
+            try {
+                final Response r = responseFuture.get();
+                getItems.add(new ResponseItem(r.getStatus()));
+            }
+            catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        final Response postResponse =
+                client.accept(MediaType.APPLICATION_JSON).back(true).path("/user").query("b", "b")
+                      .post("{\"a\":\"a\"}");
+        final Response putResponse =
+                client.accept(MediaType.APPLICATION_JSON).back(true).path("/user/71e7cb11").put(null);
+        final Response deleteResponse =
+                client.accept(MediaType.APPLICATION_JSON).back(true).path("/user/71e7cb11").delete();
+
+        final List<Response> responseList = ImmutableList.of(postResponse, putResponse, deleteResponse);
+
+        for (final Response response : responseList) {
+            items.add(new ResponseItem(response.getStatus()));
+        }
+
+        items.addAll(getItems);
+
+        wrapper = new ResponseWrapper(items);
+        return Response.ok(wrapper).build();
+    }
+
+    @Value
+    static class GetResponse implements Callable<Response> {
+        private WebClient client;
+
+        @Override
+        public Response call() throws Exception {
+            return client.get();
+        }
+    }
+
+    @GET
+    @Path("/external/proxy/user/71e7cb11")
+    @Produces("application/json")
+    public Response mockExternalProxy() {
+        final WebClient client = WebClient.create("http://localhost:9090");
+        final Response response =
+                client.accept(MediaType.APPLICATION_JSON).path("/user/71e7cb11").query("a", "a").get();
+        return Response.ok(response.getEntity()).build();
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @XmlRootElement
+    private static class ResponseWrapper {
+        private List<ResponseItem> responses;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class ResponseItem {
+        private int status;
+    }
 }

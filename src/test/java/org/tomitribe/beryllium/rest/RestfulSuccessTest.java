@@ -37,19 +37,19 @@ import cucumber.runtime.arquillian.api.Features;
 import cucumber.runtime.arquillian.api.Glues;
 
 @Glues({RestSteps.class, DatabaseSteps.class, CallsSteps.class, RedisKeyValueSteps.class,
-    RedisListSteps.class, RedisScoredMembersSteps.class, RedisSteps.class})
+               RedisListSteps.class, RedisScoredMembersSteps.class, RedisSteps.class})
 @Features({"features/successful-endpoints.feature", "features/redis.feature"})
 @RunWith(ArquillianCucumber.class)
 public class RestfulSuccessTest {
 
-  @Deployment(testable = false)
-  public static Archive<?> createDeployment() {
-    return ShrinkWrap.create(WebArchive.class, "test-app.war")
-        .addPackages(true, "org.tomitribe.beryllium")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-        .addAsManifestResource("test-persistence.xml", "persistence.xml")
-        .addAsWebInfResource("test-resources.xml", "resources.xml")
-        .addAsWebInfResource("test-openejb-jar.xml", "openejb-jar.xml");
+    @Deployment(testable = false)
+    public static Archive<?> createDeployment() {
+        return ShrinkWrap.create(WebArchive.class, "test-app.war")
+                         .addPackages(true, "org.tomitribe.beryllium")
+                         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                         .addAsManifestResource("test-persistence.xml", "persistence.xml")
+                         .addAsWebInfResource("test-resources.xml", "resources.xml")
+                         .addAsWebInfResource("test-openejb-jar.xml", "openejb-jar.xml");
 
-  }
+    }
 }
