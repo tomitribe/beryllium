@@ -22,6 +22,4 @@ after_success:
   - if [[ "$TRAVIS_BRANCH" == "releases" ]]; then
       mvn release:prepare release:perform --settings ~/settings.xml  -DskipTests -Darguments="-Dmaven.test.skip=true -DskipTests";
     fi
-env:
-  global:
-  - secure: EQ0gLiDj+vMXhjeE+yPCaGdsEshapNH/JVc/f0nwGc4Z3uzC6/8mK4/eYZ9pAcMXoO5sQjBGVFS2e8wOvnOUTs9hSkV3/NXmL2R/AGbHRGr/mkVRkq3FcjC7YB2dNdVLLFdEIA/dviQXwyFqkiQ28wvVEz65BjYSEcqGiJ1BLgA=
+
