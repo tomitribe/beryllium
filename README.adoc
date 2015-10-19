@@ -1,53 +1,71 @@
-[![Build Status](https://travis-ci.org/tomitribe/beryllium.svg?branch=master)](https://travis-ci.org/tomitribe/beryllium.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/tomitribe/beryllium/badge.svg?branch=master&service=github)](https://coveralls.io/github/tomitribe/beryllium?branch=master)
-[![Dependency Status](https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf/badge.svg)](https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium)
+https://travis-ci.org/tomitribe/beryllium.svg?branch=master[image:https://travis-ci.org/tomitribe/beryllium.svg?branch=master[Build
+Status]]
+https://coveralls.io/github/tomitribe/beryllium?branch=master[image:https://coveralls.io/repos/tomitribe/beryllium/badge.svg?branch=master&service=github[Coverage
+Status]]
+https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf[image:https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf/badge.svg[Dependency
+Status]]
+https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium[image:https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium/badge.svg[Maven
+Central]]
 
-# Beryllium
+[[beryllium]]
+= Beryllium
 
-Functional testing for REST API, Database setup, external service mocks and redis setup/assertions
+Functional testing for REST API, Database setup, external service mocks
+and redis setup/assertions
 
-This is based on [cucumber-jvm](https://github.com/cucumber/cucumber-jvm) project.
+This is based on https://github.com/cucumber/cucumber-jvm[cucumber-jvm]
+project.
 
-You need to specify your features in the gherkin language and run it with [cucumber-java](https://github.com/cucumber/cucumber-java-skeleton) or [cukespace](https://github.com/cukespace/cukespace) + [arquillian](http://arquillian.org/)
+You need to specify your features in the gherkin language and run it
+with https://github.com/cucumber/cucumber-java-skeleton[cucumber-java]
+or https://github.com/cukespace/cukespace[cukespace] +
+http://arquillian.org/[arquillian]
 
-* [Beryllium] (#beryllium)
-  * [Dependency](#dependency)
-  * [Call Restful APIs and assert Responses](#call-restful-apis-and-assert-responses)
-  * [Mock externals API calls](#mock-externals-api-calls)
-  * [Redis assertions and setup] (#redis-assertions-and-setup)
-  * [Run the cucumber tests](#run-the-cucumber-tests)
+* link:#beryllium[Beryllium] (#beryllium)
+* link:#dependency[Dependency]
+* link:#call-restful-apis-and-assert-responses[Call Restful APIs and
+assert Responses]
+* link:#mock-externals-api-calls[Mock externals API calls]
+* link:#redis-assertions-and-setup[Redis assertions and setup]
+(#redis-assertions-and-setup)
+* link:#run-the-cucumber-tests[Run the cucumber tests]
 
-## Dependency
+[[dependency]]
+== Dependency
 
-**Add as dependency in your pom.xml:**
+*Add as dependency in your pom.xml:*
 
-```xml
+[code,xml]
+----
 <dependency>
     <groupId>org.tomitribe</groupId>
     <artifactId>beryllium</artifactId>
     <version>${version}</version>
     <scope>test</scope>
 </dependency>
-```
+----
 
-## Database Setup
-**Steps for Database Setup and verification of Endpoints Results**
+[[database-setup]]
+== Database Setup
 
-Put your database connection properties in ```src/test/resources/test-db.properties```
+*Steps for Database Setup and verification of Endpoints Results*
 
-```properties
+Put your database connection properties in `src/test/resources/test-db.properties`
+
+[code,properties]
+----
 database.url=jdbc:hsqldb:mem:test
 database.driver=org.hsqldb.jdbcDriver
 database.user=SA
 database.password=
-```
+----
 
-Write your feature in gherkin language in ```src/test/resources/features/example.feature```
+Write your feature in gherkin language in `src/test/resources/features/example.feature`
 
-*it should be used in ```Given``` steps to prepare the database*
+_it should be used in `Given` steps to prepare the database_
 
-```gherkin
+[code,gherkin]
+----
   Scenario: Retrieve users list
     Given I have only the following rows in the "models" table:
       | id | created             | modified            | email                | fullname | password |
@@ -103,12 +121,15 @@ Write your feature in gherkin language in ```src/test/resources/features/example
         ]
     }
     """
-```
+----
 
-## Call Restful APIs and assert Responses
-**Steps to verify Restful API reponses**
+[[call-restful-apis-and-assert-responses]]
+== Call Restful APIs and assert Responses
 
-```gherkin
+*Steps to verify Restful API reponses*
+
+[code,gherkin]
+----
   Scenario:
     When I make a GET call to "https://api.github.com/zen?z=1" endpoint
     Then response status code should be "200"
@@ -203,12 +224,13 @@ Write your feature in gherkin language in ```src/test/resources/features/example
     When I make a DELETE call to "/successful/delete" endpoint
     Then response status code should be "204"
     And response should be empty
-```
+----
 
+[[mock-externals-api-calls]]
+== Mock externals API calls
 
-## Mock externals API calls
-
-```gherkin
+[code,gherkin]
+----
   Scenario: Mock external API
     Given The call to external service should be:
       | method | url            | statusCode |
@@ -237,19 +259,23 @@ Write your feature in gherkin language in ```src/test/resources/features/example
       ]
     }
     """
-```
+----
 
-And then put the payloads (convention over configuration) in ```src/test/resources/restito```: i.e. ```get.user.71e7cb11.json```
+And then put the payloads (convention over configuration) in `src/test/resources/restito`: i.e. `get.user.71e7cb11.json`
 
-```json
+[code,json]
+----
 {
     "sample": 21
 }
-```
+----
 
-## Redis assertions and setup
+[[redis-assertions-and-setup]]
+== Redis assertions and setup
 
-```gherkin
+
+[code,gherkin]
+----
 Scenario: Redis Steps for Key/Value
   Given I have the redis key "key1" with value "value1"
   Given I have the redis key "key2" with value in file "responses/value2.text"
@@ -322,24 +348,28 @@ Scenario: Redis Steps for Cleaning All Databases
   Then the redis key "key" in the db 0 should not exists
   And the redis key "key" in the db 3 should not exists
   And the redis key "key" in the db 7 should not exists
+----
 
-```
+[[database-assertions]]
+== Database assertions
 
+You need to put your database connection properties in `src/test/resources/test-db.properties`
 
-## Database assertions
-You need to put your database connection properties in ```src/test/resources/test-db.properties```
-
-```properties
+[code,properties]
+----
 database.url=jdbc:mysql://localhost/myapp_test
 database.driver=com.mysql.jdbc.Driver
 database.user=root
 database.password=
-```
-Write your feature in gherkin language in ```src/test/resources/features/example.feature```
+----
 
-*it should be used in ```Then``` steps to check the database*
+Write your feature in gherkin language in
+`src/test/resources/features/example.feature`
 
-```gherkin
+_it should be used in `Then` steps to check the database_
+
+[code,gherkin]
+----
 Scenario: Database check exists
     Given I have only the following rows in the "models" table:
       | id | created             | modified            | email                 | fullname | password |
@@ -349,14 +379,15 @@ Scenario: Database check exists
       | id | created             | modified            | email                 | fullname | password |
       | 4  | 2015-02-11 00:00:00 | 2015-02-11 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd |
       | 5  | 2015-02-11 00:00:00 | 2015-02-11 00:00:00 | cchacin3@superbiz.org | Carlos3  | passw0rd |
+----
 
-```
+[[run-the-cucumber-tests]]
+== Run the cucumber tests
 
-## Run the cucumber tests
+*Write a cucumber integration-test in `src/test/java`:*
 
-**Write a cucumber integration-test in ```src/test/java```:**
-
-```java
+[code,java]
+----
 import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
@@ -376,4 +407,4 @@ import cucumber.api.junit.Cucumber;
 )
 public class MyCucumberStory {
 }
-```
+----
