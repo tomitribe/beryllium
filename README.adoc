@@ -18,16 +18,14 @@ project.
 
 You need to specify your features in the gherkin language and run it
 with https://github.com/cucumber/cucumber-java-skeleton[cucumber-java]
-or https://github.com/cukespace/cukespace[cukespace] +
-http://arquillian.org/[arquillian]
+or https://github.com/cukespace/cukespace[cukespace] + http://arquillian.org/[arquillian]
 
-* link:#beryllium[Beryllium] (#beryllium)
+* link:#beryllium[Beryllium]
 * link:#dependency[Dependency]
 * link:#call-restful-apis-and-assert-responses[Call Restful APIs and
 assert Responses]
 * link:#mock-externals-api-calls[Mock externals API calls]
 * link:#redis-assertions-and-setup[Redis assertions and setup]
-(#redis-assertions-and-setup)
 * link:#run-the-cucumber-tests[Run the cucumber tests]
 
 [[dependency]]
