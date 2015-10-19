@@ -24,7 +24,7 @@ You need to specify your features in the gherkin language and run it with [cucum
 
 ```xml
 <dependency>
-    <groupId>com.tomitribe</groupId>
+    <groupId>org.tomitribe</groupId>
     <artifactId>beryllium</artifactId>
     <version>${version}</version>
     <scope>test</scope>
