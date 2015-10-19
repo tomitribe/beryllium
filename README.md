@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/tomitribe/beryllium.svg?branch=master)](https://travis-ci.org/tomitribe/beryllium.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/tomitribe/beryllium/badge.svg?branch=master&service=github)](https://coveralls.io/github/tomitribe/beryllium?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf/badge.svg)](https://www.versioneye.com/user/projects/5621a1b736d0ab0021000abf)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tomitribe/beryllium/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.tomitribe/beryllium)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.tomitribe/beryllium)
 
 # Beryllium
 

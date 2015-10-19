@@ -36,7 +36,7 @@
     <description>Functional testing for REST API, Database setup, external service mocks and redis setup/assertions.
     </description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://github.com/cchacin/beryllium</url>
+    <url>https://github.com/tomitribe/beryllium</url>
 
     <scm>
         <url>scm:git:git@github.com:tomitribe/beryllium.git</url>
