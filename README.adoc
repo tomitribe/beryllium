@@ -50,7 +50,6 @@ assert Responses]
 
 Put your database connection properties in `src/test/resources/test-db.properties`
 
-[source,properties,indent=0]
 ----
 include::src/test/resources/test-db.properties[lines=20..23]
 ----
@@ -59,7 +58,6 @@ Write your feature in gherkin language in `src/test/resources/features/example.f
 
 _it should be used in `Given` steps to prepare the database_
 
-[source,gherkin,indent=0]
 ----
 include::src/test/resources/features/database-setup.feature[]
 ----
@@ -69,7 +67,6 @@ include::src/test/resources/features/database-setup.feature[]
 
 *Steps to verify Restful API reponses*
 
-[source,gherkin,indent=0]
 ----
 include::src/test/resources/features/restful-endpoints.feature[]
 ----
@@ -77,7 +74,6 @@ include::src/test/resources/features/restful-endpoints.feature[]
 [[mock-externals-api-calls]]
 == Mock externals API calls
 
-[source,gherkin,indent=0]
 ----
 include::src/test/resources/features/mock-service.feature[]
 ----
@@ -94,7 +90,6 @@ And then put the payloads (convention over configuration) in `src/test/resources
 [[redis-assertions-and-setup]]
 == Redis assertions and setup
 
-[source,gherkin,indent=0]
 ----
 include::src/test/resources/features/redis.feature[]
 ----
@@ -107,7 +102,6 @@ Write your feature in gherkin language in
 
 _it should be used in `Then` steps to check the database_
 
-[source,gherkin,indent=0]
 ----
 include::src/test/resources/features/database-assertions.feature[]
 ----
