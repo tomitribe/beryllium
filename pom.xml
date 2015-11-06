@@ -22,7 +22,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.tomitribe</groupId>
     <artifactId>beryllium</artifactId>
-    <packaging>jar</packaging>
     <version>0.2.13-SNAPSHOT</version>
 
     <parent>

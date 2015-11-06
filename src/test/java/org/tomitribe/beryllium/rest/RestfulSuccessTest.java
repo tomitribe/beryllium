@@ -24,21 +24,17 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
-import org.tomitribe.beryllium.CallsSteps;
-import org.tomitribe.beryllium.DatabaseSteps;
-import org.tomitribe.beryllium.RedisKeyValueSteps;
-import org.tomitribe.beryllium.RedisListSteps;
-import org.tomitribe.beryllium.RedisScoredMembersSteps;
-import org.tomitribe.beryllium.RedisSteps;
-import org.tomitribe.beryllium.RestSteps;
 
+import cucumber.api.CucumberOptions;
+import cucumber.api.SnippetType;
 import cucumber.runtime.arquillian.ArquillianCucumber;
-import cucumber.runtime.arquillian.api.Features;
-import cucumber.runtime.arquillian.api.Glues;
 
-@Glues({RestSteps.class, DatabaseSteps.class, CallsSteps.class, RedisKeyValueSteps.class,
-               RedisListSteps.class, RedisScoredMembersSteps.class, RedisSteps.class})
-@Features({"features/successful-endpoints.feature", "features/redis.feature"})
+@CucumberOptions(snippets = SnippetType.CAMELCASE,
+                 strict = true,
+                 glue = {"classpath:"},
+                 features = {"classpath:features"},
+                 format = {"pretty"}
+)
 @RunWith(ArquillianCucumber.class)
 public class RestfulSuccessTest {
 
