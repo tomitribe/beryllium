@@ -2,8 +2,6 @@ sudo: false
 language: java
 jdk:
   - openjdk7
-before_script:
-  - mysql -e 'create database myapp_test;'
 services:
   - mysql
   - redis-server
@@ -11,15 +9,15 @@ cache:
   directories:
   - $HOME/.m2
 install: true
+before_script:
+  - mysql -e 'create database myapp_test;'
+#  - gpg --import beryllium.key
 script:
-  - mvn clean compile cobertura:cobertura
+  - mvn install cobertura:cobertura
 after_success:
   - mvn coveralls:report
-  - echo "<settings><servers><server><id>ossrh</id><username>\${env.SONATYPE_USERNAME}</username><password>\${env.SONATYPE_PASSWORD}</password></server></servers></settings>" > ~/settings.xml
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
       mvn deploy --settings ~/settings.xml  -DskipTests;
     fi
-  - if [[ "$TRAVIS_BRANCH" == "releases" ]]; then
-      mvn release:prepare release:perform --settings ~/settings.xml  -DskipTests -Darguments="-Dmaven.test.skip=true -DskipTests";
-    fi
+  - if [ \( -n "${TRAVIS_TAG}" \) -a  "${TRAVIS_PULL_REQUEST}" = "false" ]; then mvn deploy; fi;
 
