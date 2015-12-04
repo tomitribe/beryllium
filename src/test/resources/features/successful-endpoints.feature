@@ -196,13 +196,13 @@ Feature: Successful rest calls
     When I make a GET call to "/test-app/successful/get" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
-    And response should be json in file "/responses/successful.json"
+    And response should be json in file "responses/successful.json"
 
   Scenario:
     When I make a GET call to "/test-app/successful/get/csv" endpoint
     Then response status code should be 200
     And response content type should be "text/csv"
-    And response should be file "/responses/sample.csv"
+    And response should be file "responses/sample.csv"
 
   Scenario:
     When I make a GET call to "/test-app/successful/get" endpoint with headers:
@@ -212,7 +212,7 @@ Feature: Successful rest calls
     And response content type should be "application/json"
     And response header "Authorization" should be "OAuth qwerqweqrqwerqwer"
     And response header "X-Request-Id" should be "test-request-id"
-    And response should be json in file "/responses/successful.json"
+    And response should be json in file "responses/successful.json"
 
   Scenario:
     When I make a GET call to "/test-app/successful/get/params" endpoint with query params:
@@ -267,7 +267,7 @@ Feature: Successful rest calls
     And response should be empty
 
   Scenario: PUT call with headers
-    When I make a PUT call to "/test-app/successful/headers/put" endpoint with post body in file "/requests/post_request.json" and headers:
+    When I make a PUT call to "/test-app/successful/headers/put" endpoint with post body in file "requests/post_request.json" and headers:
       | Content-Type  | application/json        |
       | Authorization | OAuth qwerqweqrqwerqwer |
       | X-Request-Id  | test-request-id         |
@@ -289,7 +289,7 @@ Feature: Successful rest calls
     And response should be empty
 
   Scenario: POST call with headers
-    When I make a POST call to "/test-app/successful/headers/post" endpoint with post body in file "/requests/post_request.json" and headers:
+    When I make a POST call to "/test-app/successful/headers/post" endpoint with post body in file "requests/post_request.json" and headers:
       | Content-Type  | application/json        |
       | Authorization | OAuth qwerqweqrqwerqwer |
       | X-Request-Id  | test-request-id         |
@@ -299,7 +299,7 @@ Feature: Successful rest calls
     And response header "X-Request-Id" should be "test-request-id"
 
   Scenario:
-    When I make a POST call to "/test-app/successful/post" endpoint with post body in file "/requests/post_request.json"
+    When I make a POST call to "/test-app/successful/post" endpoint with post body in file "requests/post_request.json"
     Then response status code should be 201
     And response should be empty
 
@@ -382,4 +382,4 @@ Feature: Successful rest calls
     When I make a GET call to "/test-app/users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
-    And response should be json in file "/responses/orderUsers.json" ignoring array order
+    And response should be json in file "responses/orderUsers.json" ignoring array order
