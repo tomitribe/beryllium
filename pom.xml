@@ -56,12 +56,12 @@
         <truth.version>0.27</truth.version>
         <javaee.version>6.0-6</javaee.version>
         <dbsetup.version>1.6.0</dbsetup.version>
-        <jsonunit.version>1.6.1</jsonunit.version>
+        <jsonunit.version>1.7.0</jsonunit.version>
         <lombok.version>1.16.6</lombok.version>
         <restassured.version>2.6.0</restassured.version>
-        <jedis.version>2.7.3</jedis.version>
+        <jedis.version>2.8.0</jedis.version>
         <restito.version>0.7</restito.version>
-        <jsonpath.version>2.0.0</jsonpath.version>
+        <jsonpath.version>2.1.0</jsonpath.version>
     </properties>
 
     <repositories>
