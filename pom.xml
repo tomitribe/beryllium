@@ -26,9 +26,9 @@
     <version>0.2.13-SNAPSHOT</version>
 
     <parent>
-        <groupId>com.github.cchacin</groupId>
-        <artifactId>basepom</artifactId>
-        <version>0.1.8</version>
+        <groupId>org.tomitribe</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>4</version>
     </parent>
 
     <name>Beryllium</name>
