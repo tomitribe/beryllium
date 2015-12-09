@@ -3,7 +3,7 @@ Feature: Successful rest calls
   # DATABASE SQL SCRIPT
   Scenario: Retrieve users list preparing db with script
     Given I have the following sql script "sample-data.sql"
-    When I make a GET call to "/test-app/users" endpoint
+    When I make a GET call to "users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response json path list "$.*" should be of length 2
@@ -38,7 +38,7 @@ Feature: Successful rest calls
       | 1  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin@superbiz.org  | Carlos   | passw0rd  |
       | 2  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd2 |
       | 3  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin3@superbiz.org | Carlos3  | passw0rd3 |
-    When I make a GET call to "/test-app/users" endpoint
+    When I make a GET call to "users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json:
@@ -76,7 +76,7 @@ Feature: Successful rest calls
     Given I have the following rows in the "models" table:
       | id | created             | modified            | email                 | fullname | password |
       | 4  | 2015-02-11 00:00:00 | 2015-02-11 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd |
-    When I make a GET call to "/test-app/users" endpoint
+    When I make a GET call to "users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json:
@@ -135,7 +135,7 @@ Feature: Successful rest calls
       | POST   | /user?b=b          | 201        |               |
       | PUT    | /user/71e7cb11     | 204        |               |
       | DELETE | /user/71e7cb11     | 204        |               |
-    When I make a GET call to "/test-app/external/call/user/71e7cb11" endpoint
+    When I make a GET call to "external/call/user/71e7cb11" endpoint
     Then response status code should be 200
     And response json path list "$.responses" should be of length 8
     And response should be json:
@@ -175,7 +175,7 @@ Feature: Successful rest calls
     Given The call to external service should be:
       | method | url                | statusCode | filename      |
       | GET    | /user/71e7cb11?a=a | 200        | 71e7cb11.json |
-    When I make a GET call to "/test-app/external/proxy/user/71e7cb11" endpoint
+    When I make a GET call to "external/proxy/user/71e7cb11" endpoint
     Then response status code should be 200
     And response should be json:
     """
@@ -187,25 +187,25 @@ Feature: Successful rest calls
   #######
   # GET
   #######
-  Scenario:
-    When I make a GET call to "https://api.github.com/zen?z=1" endpoint
-    Then response status code should be 200
-    And response content type should be "text/plain;charset=utf-8"
+#  Scenario:
+#    When I make a GET call to "https://api.github.com/zen?z=1" endpoint
+#    Then response status code should be 200
+#    And response content type should be "text/plain;charset=utf-8"
 
   Scenario:
-    When I make a GET call to "/test-app/successful/get" endpoint
+    When I make a GET call to "successful/get" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json in file "responses/successful.json"
 
   Scenario:
-    When I make a GET call to "/test-app/successful/get/csv" endpoint
+    When I make a GET call to "successful/get/csv" endpoint
     Then response status code should be 200
     And response content type should be "text/csv"
     And response should be file "responses/sample.csv"
 
   Scenario:
-    When I make a GET call to "/test-app/successful/get" endpoint with headers:
+    When I make a GET call to "successful/get" endpoint with headers:
       | Authorization | OAuth qwerqweqrqwerqwer |
       | X-Request-Id  | test-request-id         |
     Then response status code should be 200
@@ -215,7 +215,7 @@ Feature: Successful rest calls
     And response should be json in file "responses/successful.json"
 
   Scenario:
-    When I make a GET call to "/test-app/successful/get/params" endpoint with query params:
+    When I make a GET call to "successful/get/params" endpoint with query params:
       | param1 | passwordParam |
       | param2 | nameParam     |
     Then response status code should be 200
@@ -232,7 +232,7 @@ Feature: Successful rest calls
     """
 
   Scenario:
-    When I make a GET call to "/test-app/successful/get" endpoint
+    When I make a GET call to "successful/get" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json:
@@ -250,7 +250,7 @@ Feature: Successful rest calls
   # HEAD
   #######
   Scenario:
-    When I make a HEAD call to "/test-app/successful/head" endpoint
+    When I make a HEAD call to "successful/head" endpoint
     Then response status code should be 204
     And response should be empty
 
@@ -258,7 +258,7 @@ Feature: Successful rest calls
   # PUT
   #######
   Scenario:
-    When I make a PUT call to "/test-app/successful/put" endpoint with post body:
+    When I make a PUT call to "successful/put" endpoint with post body:
     """
     {
     }
@@ -267,7 +267,7 @@ Feature: Successful rest calls
     And response should be empty
 
   Scenario: PUT call with headers
-    When I make a PUT call to "/test-app/successful/headers/put" endpoint with post body in file "requests/post_request.json" and headers:
+    When I make a PUT call to "successful/headers/put" endpoint with post body in file "requests/post_request.json" and headers:
       | Content-Type  | application/json        |
       | Authorization | OAuth qwerqweqrqwerqwer |
       | X-Request-Id  | test-request-id         |
@@ -280,7 +280,7 @@ Feature: Successful rest calls
   # POST
   #######
   Scenario:
-    When I make a POST call to "/test-app/successful/post" endpoint with post body:
+    When I make a POST call to "successful/post" endpoint with post body:
     """
     {
     }
@@ -289,7 +289,7 @@ Feature: Successful rest calls
     And response should be empty
 
   Scenario: POST call with headers
-    When I make a POST call to "/test-app/successful/headers/post" endpoint with post body in file "requests/post_request.json" and headers:
+    When I make a POST call to "successful/headers/post" endpoint with post body in file "requests/post_request.json" and headers:
       | Content-Type  | application/json        |
       | Authorization | OAuth qwerqweqrqwerqwer |
       | X-Request-Id  | test-request-id         |
@@ -299,7 +299,7 @@ Feature: Successful rest calls
     And response header "X-Request-Id" should be "test-request-id"
 
   Scenario:
-    When I make a POST call to "/test-app/successful/post" endpoint with post body in file "requests/post_request.json"
+    When I make a POST call to "successful/post" endpoint with post body in file "requests/post_request.json"
     Then response status code should be 201
     And response should be empty
 
@@ -307,7 +307,7 @@ Feature: Successful rest calls
   # DELETE
   #######
   Scenario:
-    When I make a DELETE call to "/test-app/successful/delete" endpoint
+    When I make a DELETE call to "successful/delete" endpoint
     Then response status code should be 204
     And response should be empty
 
@@ -339,7 +339,7 @@ Feature: Successful rest calls
       | 1  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin@superbiz.org  | Carlos   | passw0rd  |
       | 2  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd2 |
       | 3  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin3@superbiz.org | Carlos3  | passw0rd3 |
-    When I make a GET call to "/test-app/users" endpoint
+    When I make a GET call to "users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json ignoring array order:
@@ -379,7 +379,7 @@ Feature: Successful rest calls
       | 1  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin@superbiz.org  | Carlos   | passw0rd  |
       | 2  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd2 |
       | 3  | 2014-07-16 00:00:00 | 2014-07-16 00:00:00 | cchacin3@superbiz.org | Carlos3  | passw0rd3 |
-    When I make a GET call to "/test-app/users" endpoint
+    When I make a GET call to "users" endpoint
     Then response status code should be 200
     And response content type should be "application/json"
     And response should be json in file "responses/orderUsers.json" ignoring array order

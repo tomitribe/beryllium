@@ -24,8 +24,11 @@ import com.jayway.restassured.specification.RequestSpecification;
 
 import net.javacrumbs.jsonunit.core.Option;
 
+import org.jboss.arquillian.test.api.ArquillianResource;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import cucumber.api.DataTable;
@@ -39,30 +42,26 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 public class RestSteps {
 
     private Response response;
+    private String   responseValue;
 
-    private RequestSpecification spec = given();
-    private String responseValue;
-    private String basePath;
+    @ArquillianResource
+    private URL arquillianUrl;
 
-
-    final RequestSpecification createWebClient(final String endpointUrl) {
-        this.basePath = endpointUrl;
-        if (!endpointUrl.startsWith("http")) {
-            this.basePath = endpointUrl;
-        }
-        return given();
+    private RequestSpecification create() {
+        return given().baseUri(arquillianUrl.toString());
     }
 
     @When("^I make a (GET|HEAD) call to \"(.*?)\" endpoint$")
     public final void iMakeAGetHeadCallToEndpoint(final String method, final String endpointUrl)
             throws Throwable {
-        this.spec = createWebClient(endpointUrl);
-        execute(method);
+        execute(create(), method, endpointUrl);
     }
 
-    private void execute(final String method) throws Exception {
+    private void execute(final RequestSpecification spec,
+                         final String method,
+                         final String endpointUrl) throws Exception {
         this.response =
-                ("GET".equals(method)) ? this.spec.get(this.basePath) : this.spec.head(this.basePath);
+                ("GET".equals(method)) ? spec.get(endpointUrl) : spec.head(endpointUrl);
         this.responseValue = this.response.asString();
     }
 
@@ -70,9 +69,10 @@ public class RestSteps {
     public final void iMakeAPostPutCallToEndpointWithPostBody(String method,
                                                               String endpointUrl,
                                                               final String postBody) throws Throwable {
-        this.spec = createWebClient(endpointUrl).body(postBody);
         this.response =
-                (method.equals("POST")) ? this.spec.post(this.basePath) : this.spec.put(this.basePath);
+                (method.equals("POST")) ? create()
+                        .post(endpointUrl) : create()
+                        .put(endpointUrl);
         this.responseValue = this.response.asString();
     }
 
@@ -86,7 +86,7 @@ public class RestSteps {
 
     @When("^I make a DELETE call to \"(.*?)\" endpoint$")
     public final void iMakeADeleteCallToEndpoint(final String endpointUrl) throws Throwable {
-        this.response = createWebClient(endpointUrl).delete(endpointUrl);
+        this.response = create().delete(endpointUrl);
         this.responseValue = this.response.asString();
     }
 
@@ -94,29 +94,28 @@ public class RestSteps {
     public void iMakeAGetHeadCallToEndpointWithHeaders(final String method,
                                                        final String endpointUrl,
                                                        final DataTable headers) throws Throwable {
-        this.spec = createWebClient(endpointUrl);
-        this.spec = this.spec.headers(headers.asMap(String.class, String.class));
-        execute(method);
+        final RequestSpecification spec = create()
+                .headers(headers.asMap(String.class, String.class));
+        execute(spec, method, endpointUrl);
     }
 
     @When("^I make a (GET|HEAD) call to \"(.*?)\" endpoint with query params:$")
     public void iMakeAGetHeadCallToEndpointWithQueryParams(final String method,
                                                            final String endpointUrl,
                                                            final DataTable params) throws Throwable {
-        this.spec = createWebClient(endpointUrl);
-        this.spec = this.spec.params(params.asMap(String.class, String.class));
-        execute(method);
+        final RequestSpecification spec = create()
+                .params(params.asMap(String.class, String.class));
+        execute(spec, method, endpointUrl);
     }
 
     @When("^I make a (POST|PUT) call to \"(.*?)\" endpoint with post body in file \"(.*?)\" and headers:$")
     public void iMakeAPostPutCallToEndpointWithPostBodyInFileAndHeaders(
             final String method, final String endpointUrl, final String postBodyFilePath,
             final DataTable headers) throws IOException, URISyntaxException {
-        this.spec =
-                createWebClient(endpointUrl).headers(headers.asMap(String.class, String.class)).body(
+        final RequestSpecification spec =
+                create().headers(headers.asMap(String.class, String.class)).body(
                         Utility.fileContent(postBodyFilePath));
-        this.response =
-                (method.equals("POST")) ? this.spec.post(this.basePath) : this.spec.put(this.basePath);
+        this.response = (method.equals("POST")) ? spec.post(endpointUrl) : spec.put(endpointUrl);
         this.responseValue = this.response.asString();
     }
 
