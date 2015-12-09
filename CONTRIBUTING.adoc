@@ -16,10 +16,7 @@ https://github.com/tomitribe/beryllium/blob/master/LICENSE
 
 All files are released with the Apache 2.0 license.
 
-If you are adding a new file it should have a
-https://github.com/tomitribe/beryllium/blob/master/header.txt[header
-like this]:
-
+If you are adding a new file it should have a header like this:
 --
-include::LICENSE[]
+include::header.txt[]
 --
