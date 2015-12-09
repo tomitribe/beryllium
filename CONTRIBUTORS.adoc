@@ -1,0 +1,7 @@
+[[contributors-sorted-alphabeticaly]]
+Contributors (sorted alphabeticaly)
+-----------------------------------
+
+* *https://github.com/cchacin[Carlos Chacin]*
+* *https://github.com/danigrmartinez[Daniel Guerrero Martinez]*
+* *https://github.com/xsuoownit[Xin Suo]*
