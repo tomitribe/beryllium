@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.tomitribe.beryllium;
+package org.tomitribe.beryllium.mocks;
 
 import com.xebialabs.restito.builder.stub.StubHttp;
 import com.xebialabs.restito.semantics.Condition;

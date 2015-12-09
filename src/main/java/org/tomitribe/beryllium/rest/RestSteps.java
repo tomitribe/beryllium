@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.tomitribe.beryllium;
+package org.tomitribe.beryllium.rest;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
@@ -25,6 +25,7 @@ import com.jayway.restassured.specification.RequestSpecification;
 import net.javacrumbs.jsonunit.core.Option;
 
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.tomitribe.beryllium.Utility;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

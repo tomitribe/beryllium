@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
 
 public abstract class Utility {
 
-    static String fileContent(final String filePath) throws IOException {
+    public static String fileContent(final String filePath) throws IOException {
         return Resources.toString(Resources.getResource(filePath), Charset.defaultCharset());
     }
 }

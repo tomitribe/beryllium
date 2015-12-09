@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.tomitribe.beryllium;
+package org.tomitribe.beryllium.redis;
+
+import org.tomitribe.beryllium.Utility;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;

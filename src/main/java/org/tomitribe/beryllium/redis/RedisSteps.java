@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.tomitribe.beryllium;
+package org.tomitribe.beryllium.redis;
 
 import cucumber.api.java.en.Given;
 import redis.clients.jedis.Jedis;
