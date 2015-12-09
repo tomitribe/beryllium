@@ -20,7 +20,6 @@ If you are adding a new file it should have a
 https://github.com/tomitribe/beryllium/blob/master/header.txt[header
 like this]:
 
-[source,txt]
-----
-include::LICENSE
-----
+--
+include::LICENSE[]
+--
