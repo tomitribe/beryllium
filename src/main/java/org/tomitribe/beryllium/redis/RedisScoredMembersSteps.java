@@ -47,33 +47,37 @@ public class RedisScoredMembersSteps {
                                                                   final String score,
                                                                   final String value) {
         final double scoreValue = Double.parseDouble(score);
-        getJedis(database).select(database);
-        getJedis(database).zadd(key, scoreValue, value);
+        final Jedis jedis = getJedis(database);
+        jedis.zadd(key, scoreValue, value);
+        jedis.close();
     }
 
     @Given("^I have the redis scored members \"([^\"]*)\"(?: in the db (\\d+))? with values:$")
     public void iHaveTheRedisScoredMembersInTheDbWithValuesColon(final String key,
                                                                  final int database, final DataTable dataTable) {
         final Map<String, Double> table = dataTable.asMap(String.class, Double.class);
-        getJedis(database).select(database);
-        getJedis(database).zadd(key, table);
+        final Jedis jedis = getJedis(database);
+        jedis.zadd(key, table);
+        jedis.close();
     }
 
     @Then("^I should have the redis scored member \"([^\"]*)\"(?: in the db (\\d+))? with score \"([^\"]*)\" and value \"([^\"]*)\"$")
     public void iShouldHaveTheRedisScoredMemberInTheDbWithScoreAndValue(
             final String key, final int database, final String score, final String value) {
         final double scoredValue = Double.parseDouble(score);
-        getJedis(database).select(database);
-        assertThat(getJedis(database).zscore(key, value)).isEqualTo(scoredValue);
+        final Jedis jedis = getJedis(database);
+        assertThat(jedis.zscore(key, value)).isEqualTo(scoredValue);
+        jedis.close();
     }
 
     @Then("^I should have the redis scored members \"([^\"]*)\"(?: in the db (\\d+))? with values:$")
     public void iShouldHaveTheRedisScoredMembersInTheDbWithValuesColon(final String key,
                                                                        final int database, final DataTable dataTable) {
         final Map<String, Double> table = dataTable.asMap(String.class, Double.class);
-        getJedis(database).select(database);
+        final Jedis jedis = getJedis(database);
         for (Map.Entry<String, Double> entry : table.entrySet()) {
-            assertThat(getJedis(database).zscore(key, entry.getKey())).isEqualTo(entry.getValue());
+            assertThat(jedis.zscore(key, entry.getKey())).isEqualTo(entry.getValue());
         }
+        jedis.close();
     }
 }
