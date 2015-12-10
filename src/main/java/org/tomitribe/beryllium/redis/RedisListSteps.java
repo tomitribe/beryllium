@@ -24,28 +24,16 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.tomitribe.beryllium.Utility.fileContent;
 
 public class RedisListSteps {
-    private final JedisPool jedisPool = new JedisPool("localhost");
-
-    private Jedis getJedis(final Integer db) {
-        final Jedis jedis = jedisPool.getResource();
-        if (db != null) {
-            jedis.select(db);
-        } else {
-            jedis.select(0);
-        }
-        return jedis;
-    }
 
     @Given("^I have the redis list \"([^\"]*)\"(?: in the db (\\d+))? with values \"([^\"]*)\"$")
     public void iHaveTheRedisListInTheDbWithValues(final String list, final Integer db,
                                                    final String values) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         jedis.lpush(list, values.split(","));
         jedis.close();
     }
@@ -59,7 +47,7 @@ public class RedisListSteps {
     @Given("^I have the redis list \"([^\"]*)\"(?: in the db (\\d+))? with values:$")
     public void iHaveTheRedisListInTheDbWithValues(final String list, final Integer db,
                                                    final DataTable dataTable) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         final List<String> table = dataTable.asList(String.class);
         jedis.lpush(list, table.toArray(new String[table.size()]));
         jedis.close();
@@ -70,7 +58,7 @@ public class RedisListSteps {
                                                                  final Integer db,
                                                                  final String values,
                                                                  final int seconds) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         jedis.lpush(list, values.split(","));
         jedis.expire(list, seconds);
         jedis.close();
@@ -79,7 +67,7 @@ public class RedisListSteps {
     @Then("^the redis list \"([^\"]*)\"(?: in the db (\\d+))? should be \"([^\"]*)\"$")
     public void theRedisListInTheDbShouldBe(String list, final Integer db, String values)
             throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         for (final String value : values.split(",")) {
             assertThat(values).contains(jedis.lpop(list));
         }
@@ -89,7 +77,7 @@ public class RedisListSteps {
     @Then("^the redis list \"([^\"]*)\"(?: in the db (\\d+))? should be:$")
     public void theRedisListInTheDbShouldBe(final String list, final Integer db,
                                             final DataTable dataTable) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         final List<String> table = dataTable.asList(String.class);
         for (final String value : table) {
             assertThat(table).contains(jedis.lpop(list));
@@ -99,14 +87,14 @@ public class RedisListSteps {
 
     @Then("^the redis list \"([^\"]*)\"(?: in the db (\\d+))? should exists$")
     public void theRedisListInTheDbShouldExists(final String list, final Integer db) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         assertThat(jedis.exists(list)).isTrue();
         jedis.close();
     }
 
     @Then("^the redis lists \"([^\"]*)\"(?: in the db (\\d+))? should exists$")
     public void theRedisListsInTheDbShouldExists(final String list, final Integer db) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         for (final String key : list.split(",")) {
             assertThat(jedis.exists(key)).isTrue();
         }
@@ -116,7 +104,7 @@ public class RedisListSteps {
     @Then("^the redis lists(?: in the db (\\d+))? should exists:$")
     public void theRedisListsInTheDbShouldExists(final Integer db, final DataTable dataTable)
             throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         for (final String key : dataTable.asList(String.class)) {
             assertThat(jedis.exists(key)).isTrue();
         }
@@ -139,7 +127,7 @@ public class RedisListSteps {
     @Then("^the redis lists \"([^\"]*)\"(?: in the db (\\d+))? should not exists$")
     public void theRedisListsShouldNotExists(final String list, final Integer db)
             throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         for (final String key : list.split(",")) {
             assertThat(jedis.exists(key)).isFalse();
         }
@@ -149,7 +137,7 @@ public class RedisListSteps {
     @Then("^the redis list \"([^\"]*)\"(?: in the db (\\d+))? should be file \"([^\"]*)\"$")
     public void theRedisListShouldBeFile(final String list, final Integer db,
                                          final String filename) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         final String[] values = fileContent(filename).split("\n");
         assertThat(values).asList().contains(jedis.lpop(list));
         jedis.close();

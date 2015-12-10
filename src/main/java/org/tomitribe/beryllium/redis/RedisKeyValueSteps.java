@@ -24,28 +24,16 @@ import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import static com.google.common.truth.Truth.assertThat;
 
 
 public class RedisKeyValueSteps {
-    private final JedisPool jedisPool = new JedisPool("localhost");
-
-    private Jedis getJedis(final Integer db) {
-        final Jedis jedis = jedisPool.getResource();
-        if (db != null) {
-            jedis.select(db);
-        } else {
-            jedis.select(0);
-        }
-        return jedis;
-    }
 
     @Given("^I have the redis key \"([^\"]*)\"(?: in the db (\\d+))? with value \"([^\"]*)\"$")
     public void iHaveTheRedisKeyWithValue(final String key, final Integer db, final String value)
             throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         jedis.set(key, value);
         jedis.close();
     }
@@ -65,7 +53,7 @@ public class RedisKeyValueSteps {
     @Then("^the redis key \"([^\"]*)\"(?: in the db (\\d+))? should be \"([^\"]*)\"$")
     public void theRedisKeyInTheDbShouldBe(final String key, final Integer db, final String value)
             throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         assertThat(jedis.get(key)).isEqualTo(value);
         jedis.close();
     }
@@ -86,7 +74,7 @@ public class RedisKeyValueSteps {
     public void iHaveTheRedisKeyInTheDbWithValueWithTTL(final String key, final Integer db,
                                                         final String value, final int seconds) throws Throwable {
         this.iHaveTheRedisKeyWithValue(key, db, value);
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         jedis.expire(key, seconds);
         jedis.close();
     }
@@ -100,14 +88,14 @@ public class RedisKeyValueSteps {
 
     @Then("^the redis key \"([^\"]*)\"(?: in the db (\\d+))? should exists$")
     public void theRedisKeyInTheDbShouldExists(final String key, final Integer db) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         assertThat(jedis.get(key)).isNotNull();
         jedis.close();
     }
 
     @Then("^the redis key \"([^\"]*)\"(?: in the db (\\d+))? should not exists$")
     public void theRedisKeyInTheDbShouldNotExists(final String key, final Integer db) throws Throwable {
-        final Jedis jedis = getJedis(db);
+        final Jedis jedis = RedisUtil.getJedis(db);
         assertThat(jedis.get(key)).isNull();
         jedis.close();
     }

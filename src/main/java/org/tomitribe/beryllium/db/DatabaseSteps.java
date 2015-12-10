@@ -18,6 +18,8 @@
  */
 package org.tomitribe.beryllium.db;
 
+import com.google.common.io.Resources;
+
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.Destination;
 import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
@@ -29,7 +31,6 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -57,7 +58,7 @@ public class DatabaseSteps {
         try (InputStream resource =
                      Thread.currentThread().getContextClassLoader().getResourceAsStream("test-db.properties")) {
             properties.load(resource);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -105,8 +106,8 @@ public class DatabaseSteps {
 
     @Given("^I have the following sql script \"([^\"]*)\"$")
     public void iHaveTheFollowingSQLScript(final String script) throws Throwable {
-        new ScriptRunner(this.destination.getConnection()).runScript(new BufferedReader(new FileReader(
-                Thread.currentThread().getContextClassLoader().getResource(script).getPath())));
+        new ScriptRunner(this.destination.getConnection()).runScript(new BufferedReader(new FileReader(Resources.getResource(
+                script).getPath())));
     }
 
     @Then("^I should have the following rows in the \"([^\"]*)\" table:$")

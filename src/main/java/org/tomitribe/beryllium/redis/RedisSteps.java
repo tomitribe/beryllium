@@ -19,18 +19,15 @@
 package org.tomitribe.beryllium.redis;
 
 import cucumber.api.java.en.Given;
-import redis.clients.jedis.Jedis;
 
 public class RedisSteps {
-    private final Jedis jedis = new Jedis("localhost");
 
     @Given("^I have cleaned redis(?: db (\\d+))?$")
     public void iHaveCleanedRedisDb(final Integer db) {
         if (db == null) {
-            jedis.flushAll();
+            RedisUtil.getJedis().flushAll();
         } else {
-            jedis.select(db);
-            jedis.flushDB();
+            RedisUtil.getJedis(db).flushDB();
         }
     }
 }
