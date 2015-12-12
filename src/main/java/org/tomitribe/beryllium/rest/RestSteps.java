@@ -163,9 +163,14 @@ public class RestSteps {
         assertThat(this.responseValue).isEmpty();
     }
 
+    @Then("^response should be:$")
+    public final void responseShouldBe(final String contentFile) throws Throwable {
+        assertThat(this.responseValue).isEqualTo(contentFile);
+    }
+
     @Then("^response should be file \"(.*?)\"$")
     public final void responseShouldBeFile(final String contentFilePath) throws Throwable {
-        assertThat(this.responseValue).isEqualTo(Utility.fileContent(contentFilePath));
+        this.responseShouldBe(Utility.fileContent(contentFilePath));
     }
 
     @Then("^response header \"(.*?)\" should be \"(.*?)\"$")

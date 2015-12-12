@@ -68,6 +68,15 @@ public class Controller {
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     @GET
+    @Path("/successful/get/plain")
+    @Produces("text/plain")
+    public Response successfulGETPlain(@Context final HttpServletRequest request) {
+        Response.ResponseBuilder builder = Response.ok("Hello");
+        buildResponseHeaders(builder, request);
+        return builder.build();
+    }
+
+    @GET
     @Path("/successful/get")
     @Produces("application/json")
     public Response successfulGET(@Context final HttpServletRequest request) {
