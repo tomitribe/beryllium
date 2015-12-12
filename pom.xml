@@ -54,7 +54,8 @@
         <tomee.version>1.7.3</tomee.version>
         <junit.version>4.12</junit.version>
         <assertj.version>2.0.0</assertj.version>
-        <truth.version>0.27</truth.version>
+        <truth.version>0.28</truth.version>
+        <arquillian.test.version>1.1.10.Final</arquillian.test.version>
         <javaee.version>6.0-6</javaee.version>
         <dbsetup.version>1.6.0</dbsetup.version>
         <jsonunit.version>1.7.0</jsonunit.version>
@@ -184,8 +185,8 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.37</version>
-            <scope>runtime</scope>
+            <version>5.1.38</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -208,7 +209,7 @@
         <dependency>
             <groupId>org.jboss.arquillian.test</groupId>
             <artifactId>arquillian-test-impl-base</artifactId>
-            <version>1.1.9.Final</version>
+            <version>${arquillian.test.version}</version>
         </dependency>
 
     </dependencies>
