@@ -133,9 +133,7 @@ public class RestSteps {
     @Then("^response should be json in file \"(.*?)\"$")
     public final void responseShouldBeJsonResponseBody(final String contentFilePath)
             throws Throwable {
-
-        final String content = Utility.fileContent(contentFilePath);
-        this.responseShouldBeJson(content);
+        this.responseShouldBeJson(Utility.fileContent(contentFilePath));
     }
 
     @Then("^response should be json in file \"(.*?)\" ignoring array order$")
