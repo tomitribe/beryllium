@@ -19,7 +19,7 @@
 package org.tomitribe.beryllium.rest;
 
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 
 import net.javacrumbs.jsonunit.core.Option;
@@ -42,8 +42,8 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 
 public class RestSteps {
 
-    private Response response;
-    private String   responseValue;
+    private ValidatableResponse response;
+    private String              responseValue;
 
     @ArquillianResource
     private URL arquillianUrl;
@@ -62,8 +62,8 @@ public class RestSteps {
                          final String method,
                          final String endpointUrl) throws Exception {
         this.response =
-                ("GET".equals(method)) ? spec.get(endpointUrl) : spec.head(endpointUrl);
-        this.responseValue = this.response.asString();
+                ("GET".equals(method)) ? spec.get(endpointUrl).then() : spec.head(endpointUrl).then();
+        this.responseValue = this.response.extract().body().asString();
     }
 
     @When("^I make a (POST|PUT) call to \"(.*?)\" endpoint with post body:$")
@@ -72,9 +72,9 @@ public class RestSteps {
                                                               final String postBody) throws Throwable {
         this.response =
                 (method.equals("POST")) ? create()
-                        .post(endpointUrl) : create()
-                        .put(endpointUrl);
-        this.responseValue = this.response.asString();
+                        .post(endpointUrl).then() : create()
+                        .put(endpointUrl).then();
+        this.responseValue = this.response.extract().body().asString();
     }
 
     @When("^I make a (POST|PUT) call to \"(.*?)\" endpoint with post body in file \"(.*?)\"$")
@@ -87,8 +87,8 @@ public class RestSteps {
 
     @When("^I make a DELETE call to \"(.*?)\" endpoint$")
     public final void iMakeADeleteCallToEndpoint(final String endpointUrl) throws Throwable {
-        this.response = create().delete(endpointUrl);
-        this.responseValue = this.response.asString();
+        this.response = create().delete(endpointUrl).then();
+        this.responseValue = this.response.extract().body().asString();
     }
 
     @When("^I make a (GET|HEAD) call to \"(.*?)\" endpoint with headers:$")
@@ -116,18 +116,18 @@ public class RestSteps {
         final RequestSpecification spec =
                 create().headers(headers.asMap(String.class, String.class)).body(
                         Utility.fileContent(postBodyFilePath));
-        this.response = (method.equals("POST")) ? spec.post(endpointUrl) : spec.put(endpointUrl);
-        this.responseValue = this.response.asString();
+        this.response = (method.equals("POST")) ? spec.post(endpointUrl).then() : spec.put(endpointUrl).then();
+        this.responseValue = this.response.extract().body().asString();
     }
 
     @Then("^response status code should be (\\d+)$")
     public final void responseStatusCodeShouldBe(final int statusCode) throws Throwable {
-        assertThat(this.response.getStatusCode()).isEqualTo(statusCode);
+        assertThat(this.response.extract().statusCode()).isEqualTo(statusCode);
     }
 
     @Then("^response content type should be \"(.*?)\"$")
     public final void responseContentTypeShouldBe(final String contentType) throws Throwable {
-        assertThat(contentType).isEqualTo(this.response.contentType());
+        assertThat(this.response.extract().contentType()).isEqualTo(contentType);
     }
 
     @Then("^response should be json in file \"(.*?)\"$")
@@ -176,7 +176,7 @@ public class RestSteps {
     @Then("^response header \"(.*?)\" should be \"(.*?)\"$")
     public final void responseHeaderShouldBe(final String responseHeaderName,
                                              final String headerValue) throws Throwable {
-        assertThat(this.response.getHeader(responseHeaderName)).isEqualTo(headerValue);
+        assertThat(this.response.extract().header(responseHeaderName)).isEqualTo(headerValue);
     }
 
     @Then("^response json path list \"(.*?)\" should be:$")
