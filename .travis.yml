@@ -10,8 +10,11 @@ services:
 cache:
   directories:
   - $HOME/.m2
+  - $HOME/.jdk
 install: true
 script:
+  - echo $M2_HOME
+  - echo $M3_HOME
   - ./mvnw clean compile cobertura:cobertura
 after_success:
   - ./mvnw coveralls:report
