@@ -12,14 +12,14 @@ cache:
   - $HOME/.m2
 install: true
 script:
-  - mvn clean compile cobertura:cobertura
+  - ./mvnw clean compile cobertura:cobertura
 after_success:
-  - mvn coveralls:report
+  - ./mvnw coveralls:report
   - echo "<settings><servers><server><id>ossrh</id><username>\${env.SONATYPE_USERNAME}</username><password>\${env.SONATYPE_PASSWORD}</password></server></servers></settings>" > ~/settings.xml
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      mvn deploy --settings ~/settings.xml  -DskipTests;
+      ./mvnw deploy --settings ~/settings.xml  -DskipTests;
     fi
   - if [[ "$TRAVIS_BRANCH" == "releases" ]]; then
-      mvn release:prepare release:perform --settings ~/settings.xml  -DskipTests -Darguments="-Dmaven.test.skip=true -DskipTests";
+      ./mvnw release:prepare release:perform --settings ~/settings.xml  -DskipTests -Darguments="-Dmaven.test.skip=true -DskipTests";
     fi
 
