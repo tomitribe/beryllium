@@ -1,6 +1,6 @@
 sudo: false
 language: java
-  - oraclejdk8
+  - openjdk7
 services:
   - mysql
   - redis-server
