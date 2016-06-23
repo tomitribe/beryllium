@@ -81,7 +81,7 @@ public class DatabaseSteps {
     }
 
     @Given("^I have no rows in the \"([^\"]*)\" table$")
-    public void iHaveNoRowsInTheTable(String tableName) throws Throwable {
+    public void iHaveNoRowsInTheTable(final String tableName) throws Throwable {
         this.deleteAll(tableName);
     }
 
