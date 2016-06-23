@@ -80,6 +80,11 @@ public class DatabaseSteps {
         this.insert(tableName, data);
     }
 
+    @Given("^I have no rows in the \"([^\"]*)\" table$")
+    public void iHaveNoRowsInTheTable(String tableName) throws Throwable {
+        this.deleteAll(tableName);
+    }
+
     void insert(final String tableName, final DataTable data) {
         final List<DataTableRow> rows = data.getGherkinRows();
         final List<String> columns = rows.get(0).getCells();
