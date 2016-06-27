@@ -123,6 +123,19 @@ Feature: Successful rest calls
       | Carlos2 |
     And response json path element "$[0].id" should be "1"
 
+  Scenario: Retrieve empty users list
+    Given I have the following rows in the "models" table:
+      | id | created             | modified            | email                 | fullname | password |
+      | 5  | 2015-02-11 00:00:00 | 2015-02-11 00:00:00 | cchacin2@superbiz.org | Carlos2  | passw0rd |
+    When I have no rows in the "models" table
+    And I make a GET call to "users" endpoint
+    Then response status code should be 200
+    And response content type should be "application/json"
+    And response should be json:
+    """
+    []
+    """
+
   # EXTERNAL SERVICE
   Scenario: Mock external API
     Given The call to external service should be:
