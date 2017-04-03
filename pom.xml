@@ -48,6 +48,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
         <!-- Version strings -->
+        <sl4j.version>1.7.22</sl4j.version>
         <cukespace.version>1.6.1</cukespace.version>
         <cucumber.version>1.2.4</cucumber.version>
         <tomee.version>1.7.3</tomee.version>
@@ -73,6 +74,12 @@
     </repositories>
 
     <dependencies>
+        <!-- SL4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${sl4j.version}</version>
+        </dependency>
 
         <!-- Java EE 6 -->
         <dependency>

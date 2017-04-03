@@ -19,12 +19,17 @@
 package org.tomitribe.beryllium.rest;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.restassured.filter.log.RequestLoggingFilter;
+import com.jayway.restassured.filter.log.ResponseLoggingFilter;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 
 import net.javacrumbs.jsonunit.core.Option;
 
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.tomitribe.beryllium.Utility;
 
 import java.io.IOException;
@@ -35,6 +40,7 @@ import java.util.List;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.tomitribe.beryllium.internal.logging.LoggerPrintStream;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.jayway.restassured.RestAssured.given;
@@ -42,14 +48,21 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 
 public class RestSteps {
 
-    private ValidatableResponse response;
-    private String              responseValue;
+    private static Logger LOGGER = LoggerFactory.getLogger(RestSteps.class);
+
+    private ValidatableResponse   response;
+    private String                responseValue;
+    private LoggerPrintStream     loggerPrintStream = new LoggerPrintStream(LOGGER, Level.DEBUG);
+    private RequestLoggingFilter  requestLoggingFilter = new RequestLoggingFilter(loggerPrintStream);
+    private ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(loggerPrintStream);
 
     @ArquillianResource
     private URL arquillianUrl;
 
     private RequestSpecification create() {
-        return given().baseUri(arquillianUrl.toString());
+        return given()
+            .filters(requestLoggingFilter, responseLoggingFilter)
+            .baseUri(arquillianUrl.toString());
     }
 
     @When("^I make a (GET|HEAD) call to \"(.*?)\" endpoint$")
