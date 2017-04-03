@@ -85,8 +85,8 @@ public class RestSteps {
                                                               final String postBody) throws Throwable {
         this.response =
                 (method.equals("POST")) ? create()
-                        .post(endpointUrl).then() : create()
-                        .put(endpointUrl).then();
+                        .body(postBody).post(endpointUrl).then() : create()
+                        .body(postBody).put(endpointUrl).then();
         this.responseValue = this.response.extract().body().asString();
     }
 
