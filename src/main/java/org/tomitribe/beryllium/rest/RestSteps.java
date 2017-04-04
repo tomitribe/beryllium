@@ -48,7 +48,7 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 
 public class RestSteps {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(RestSteps.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestSteps.class);
 
     private ValidatableResponse   response;
     private String                responseValue;
