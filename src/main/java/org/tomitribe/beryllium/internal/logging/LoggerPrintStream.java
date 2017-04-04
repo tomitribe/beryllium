@@ -74,6 +74,9 @@ public class LoggerPrintStream extends PrintStream {
         case ERROR:
           logger.error(message);
           break;
+        default:
+          logger.info(message);
+          break;
       }
     }
   }
